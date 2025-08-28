@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио разработчика</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Базовые стили и сброс */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary-color: #8B5CF6;
+            --secondary-color: #7C3AED;
+            --accent-color: #10B981;
+            --text-color: #F3F4F6;
+            --light-text: #E5E7EB;
+            --dark-bg: #111827;
+            --darker-bg: #0F172A;
+            --card-bg: #1E293B;
+            --gradient-start: #8B5CF6;
+            --gradient-end: #10B981;
+        }
+
+        body {
+            color: var(--text-color);
+            background-color: var(--dark-bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Контейнер для частиц */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Навигация */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Основные секции */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Герой секция */
+        #hero {
+            text-align: center;
+            padding-top: 10rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--light-text);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease 0.4s forwards;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Секция "Обо мне" */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s ease;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--darker-bg) 100%);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+        }
+
+        /* Секция навыков */
+        #skills {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.7) 0%, rgba(30, 41, 59, 0.7) 100%);
+            border-radius: 20px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .skill-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .skill-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        /* Секция технологий */
+        #technologies {
+            position: relative;
+            padding: 6rem 2rem;
+        }
+
+        .tech-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tech-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Секция проектов */
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .project-content p {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Секция контактов */
+        #contact {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.7) 0%, rgba(30, 41, 59, 0.7) 100%);
+            text-align: center;
+            border-radius: 20px;
+            margin: 2rem auto;
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-description {
+            margin-bottom: 3rem;
+            color: var(--light-text);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            color: var(--secondary-color);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .projects-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Контейнер для частиц -->
+    <div id="particles-js"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Портфолио</div>
+            <div class="nav-links">
+                <a href="#about">Обо мне</a>
+                <a href="#skills">Навыки</a>
+                <a href="#technologies">Технологии</a>
+                <a href="#projects">Проекты</a>
+                <a href="#contact">Контакты</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Привет</h1>
+            <p class="hero-description">Я Full-stack разработчик с увлечение к созданию инновационных и функциональных веб-приложений</p>
+            <a href="#contact" class="btn">Связаться со мной</a>
+        </div>
+    </section>
+
+    <!-- Секция "Обо мне" -->
+    <section id="about">
+        <div class="about-container">
+            <div class="about-image">
+                <i class="fas fa-code fa-5x" style="color: #8B5CF6;"></i>
+            </div>
+            <div class="about-content">
+                <h2>Обо мне</h2>
+                <p>Привет! Я full-stack разработчик с более чем 5-летним опытом создания современных и отзывчивых веб-приложений. Специализируюсь на разработке полного цикла - от идеи до реализации.</p>
+                <p>Моя цель - создавать не только функциональные, но и визуально привлекательные продукты, которые обеспечивают исключительный пользовательский опыт и решают реальные бизнес-задачи.</p>
+                <p>В свободное время люблю изучать новые технологии, участвовать в хакатонах и вносить вклад в open-source сообщество.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция навыков -->
+    <section id="skills">
+        <h2 class="section-title">Навыки</h2>
+        <div class="skills-container">
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Frontend разработка</h3>
+                <p>HTML, CSS, JavaScript, React, Vue.js, TypeScript</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-server"></i></div>
+                <h3>Backend разработка</h3>
+                <p>Node.js, Express, MongoDB, REST API, GraphQL</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Мобильная разработка</h3>
+                <p>React Native, Flutter, адаптивный дизайн</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-palette"></i></div>
+                <h3>UI/UX дизайн</h3>
+                <p>Figma, Adobe XD, пользовательские интерфейсы, прототипирование</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция технологий -->
+    <section id="technologies">
+        <h2 class="section-title">Знания технологий</h2>
+        <div class="tech-container">
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-html5"></i></div>
+                <div class="tech-name">HTML5</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-css3-alt"></i></div>
+                <div class="tech-name">CSS3</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-js"></i></div>
+                <div class="tech-name">JavaScript</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-react"></i></div>
+                <div class="tech-name">React</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-node-js"></i></div>
+                <div class="tech-name">Node.js</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-python"></i></div>
+                <div class="tech-name">Python</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fas fa-database"></i></div>
+                <div class="tech-name">MongoDB</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fas fa-database"></i></div>
+                <div class="tech-name">PostgreSQL</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-git-alt"></i></div>
+                <div class="tech-name">Git</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-golang"></i></div>
+                <div class="tech-name">Go</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-java"></i></div>
+                <div class="tech-name">Java</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-rust"></i></div>
+                <div class="tech-name">Rust</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-php"></i></div>
+                <div class="tech-name">PHP</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-swift"></i></div>
+                <div class="tech-name">Swift</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-hashtag"></i></div>
+                <div class="tech-name">C#</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-docker"></i></div>
+                <div class="tech-name">Docker</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fas fa-cloud"></i></div>
+                <div class="tech-name">AWS</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon"><i class="fab fa-vuejs"></i></div>
+                <div class="tech-name">Vue.js</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция проектов -->
+    <section id="projects">
+        <h2 class="section-title">Проекты</h2>
+        <div class="projects-container">
+            <div class="project-card">
+                <div class="project-image"><i class="fas fa-globe"></i></div>
+                <div class="project-content">
+                    <h3>Корпоративный сайт</h3>
+                    <p>Современный корпоративный сайт с адаптивным дизайном и системой управления контентом.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Node.js</span>
+                        <span class="project-tag">MongoDB</span>
+                    </div>
+                    <a href="https://cms-ruby-nu.vercel.app/" class="project-link">
+                        Посмотреть проект <span>→</span>
+                    </a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image"><i class="fas fa-shopping-cart"></i></div>
+                <div class="project-content">
+                    <h3>Интернет-магазин</h3>
+                    <p>Полнофункциональный интернет-магазин с корзиной, фильтрами и системой оплаты.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Vue.js</span>
+                        <span class="project-tag">Express</span>
+                        <span class="project-tag">Stripe</span>
+                    </div>
+                    <a href="https://cms-ruby-nu.vercel.app/" class="project-link">
+                        Посмотреть проект <span>→</span>
+                    </a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image"><i class="fas fa-chart-line"></i></div>
+                <div class="project-content">
+                    <h3>Дашборд аналитики</h3>
+                    <p>Интерактивный дашборд для визуализации и анализа больших данных в реальном времени.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">D3.js</span>
+                        <span class="project-tag">WebSocket</span>
+                    </div>
+                    <a href="https://cms-ruby-nu.vercel.app/" class="project-link">
+                        Посмотреть проект <span>→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция контактов -->
+    <section id="contact">
+        <div class="contact-container">
+            <h2 class="section-title">Контакты</h2>
+            <p class="contact-description">Готовы начать новый проект? Свяжитесь со мной, и давайте обсудим, как я могу помочь вам достичь ваших целей.</p>
+            
+            <div class="contact-links">
+                <a href="mailto:niful1065@gmail.com" class="contact-link"><i class="fas fa-envelope"></i></a>
+                <a href="https://github.com/niful" class="contact-link"><i class="fab fa-github"></i></a>
+                <a href="https://t.me/Workaholic0_0" class="contact-link"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+            
+            <a href="mailto:niful1065@gmail.com" class="btn">Написать мне</a>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <p>© 2023 Все права защищены.</p>
+    </footer>
+
+    <!-- Скрипты для частиц -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- JavaScript для анимаций -->
+    <script>
+        // Инициализация частиц
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 80,
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: {
+                        value: "#8B5CF6"
+                    },
+                    shape: {
+                        type: "char",
+                        character: {
+                            value: ["{", "}", "<", ">", "/", ";", "=", "()", "#"],
+                            font: "verdana",
+                            style: "",
+                            weight: "400"
+                        }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 12,
+                        random: true
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#8B5CF6",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: {
+                            enable: false,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        grab: {
+                            distance: 140,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        push: {
+                            particles_nb: 4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+        });
+
+        // Плавная прокрутка для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Анимация элементов при скролле
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Наблюдаем за элементами, которые должны анимироваться
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.about-image, .skill-card, .project-card, .tech-item');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
